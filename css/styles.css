@@ -4,7 +4,17 @@
    ========================================================= */
 
 /* ---------- Design tokens ---------- */
-
+.site-logo {
+    display: block;
+    width: 112px;
+    height: 112px;
+    margin: 0 auto 28px;
+    object-fit: contain;
+    border: 3px solid var(--gold-light);
+    border-radius: 50%;
+    background-color: var(--paper);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
 :root {
     --ink: #172a32;
     --ink-soft: #40545b;
