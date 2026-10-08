@@ -1,7 +1,6 @@
 "use strict";
 
-
-/* Contact form validation and local preview */
+/* Validates the local contact form and shows a preview without sending data. */
 const contactForm = document.querySelector("#contact-form");
 const formFeedback = document.querySelector("#form-feedback");
 
@@ -19,12 +18,13 @@ if (contactForm && formFeedback) {
 
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        formFeedback.textContent = "";
+        formFeedback.className = "form-feedback";
 
         if (name === "") {
             formFeedback.textContent =
-                "Please enter your name.";
+                "Please enter your name. Names containing only spaces are not accepted.";
 
+            formFeedback.classList.add("form-error");
             nameInput.focus();
             return;
         }
@@ -33,14 +33,16 @@ if (contactForm && formFeedback) {
             formFeedback.textContent =
                 "Please enter a valid email address.";
 
+            formFeedback.classList.add("form-error");
             emailInput.focus();
             return;
         }
 
         if (message === "") {
             formFeedback.textContent =
-                "Please enter a message.";
+                "Please enter a message. Messages containing only spaces are not accepted.";
 
+            formFeedback.classList.add("form-error");
             messageInput.focus();
             return;
         }
@@ -51,14 +53,15 @@ if (contactForm && formFeedback) {
             + `Email: ${email}. `
             + `This is a local preview only; no message was sent.`;
 
+        formFeedback.classList.add("form-success");
+
         contactForm.reset();
     });
 }
 
 
-/* Expandable project details */
-const detailButtons =
-    document.querySelectorAll(".details-button");
+/* Opens and closes additional information for each project card. */
+const detailButtons = document.querySelectorAll(".details-button");
 
 detailButtons.forEach(function (button) {
     button.addEventListener("click", function () {
@@ -78,18 +81,11 @@ detailButtons.forEach(function (button) {
 });
 
 
-/* Previous and Next photo gallery */
-const galleryItems =
-    document.querySelectorAll(".gallery-item");
-
-const previousPhotoButton =
-    document.querySelector("#previous-photo");
-
-const nextPhotoButton =
-    document.querySelector("#next-photo");
-
-const galleryStatus =
-    document.querySelector("#gallery-status");
+/* Displays one gallery photo at a time and handles first/last boundaries. */
+const galleryItems = document.querySelectorAll(".gallery-item");
+const previousPhotoButton = document.querySelector("#previous-photo");
+const nextPhotoButton = document.querySelector("#next-photo");
+const galleryStatus = document.querySelector("#gallery-status");
 
 let currentPhotoIndex = 0;
 
@@ -100,8 +96,7 @@ function displayPhoto(index) {
 
     if (galleryStatus) {
         galleryStatus.textContent =
-            `Showing photo ${index + 1} of `
-            + `${galleryItems.length}.`;
+            `Showing photo ${index + 1} of ${galleryItems.length}.`;
     }
 
     if (previousPhotoButton) {
@@ -116,30 +111,29 @@ function displayPhoto(index) {
 
 if (galleryItems.length > 0) {
     displayPhoto(currentPhotoIndex);
+
+    if (previousPhotoButton) {
+        previousPhotoButton.addEventListener("click", function () {
+            if (currentPhotoIndex > 0) {
+                currentPhotoIndex -= 1;
+                displayPhoto(currentPhotoIndex);
+            }
+        });
+    }
+
+    if (nextPhotoButton) {
+        nextPhotoButton.addEventListener("click", function () {
+            if (currentPhotoIndex < galleryItems.length - 1) {
+                currentPhotoIndex += 1;
+                displayPhoto(currentPhotoIndex);
+            }
+        });
+    }
 }
 
-if (previousPhotoButton) {
-    previousPhotoButton.addEventListener("click", function () {
-        if (currentPhotoIndex > 0) {
-            currentPhotoIndex -= 1;
-            displayPhoto(currentPhotoIndex);
-        }
-    });
-}
 
-if (nextPhotoButton) {
-    nextPhotoButton.addEventListener("click", function () {
-        if (currentPhotoIndex < galleryItems.length - 1) {
-            currentPhotoIndex += 1;
-            displayPhoto(currentPhotoIndex);
-        }
-    });
-}
-
-
-/* Light and dark theme switch */
-const themeToggle =
-    document.querySelector("#theme-toggle");
+/* Switches between readable light and dark colour themes. */
+const themeToggle = document.querySelector("#theme-toggle");
 
 if (themeToggle) {
     themeToggle.addEventListener("click", function () {
