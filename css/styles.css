@@ -736,3 +736,135 @@ footer p {
         animation-iteration-count: 1 !important;
     }
 }
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.project-card {
+    padding: 22px;
+    background-color: #f4f8f7;
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--teal);
+    border-radius: var(--radius);
+}
+
+.project-card h3 {
+    margin-top: 0;
+}
+
+.details-button,
+#previous-photo,
+#next-photo,
+#theme-toggle {
+    padding: 10px 16px;
+    color: var(--paper);
+    background-color: var(--navy);
+    border: 2px solid var(--navy);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.details-button:hover,
+#previous-photo:hover,
+#next-photo:hover,
+#theme-toggle:hover {
+    color: var(--navy);
+    background-color: var(--paper);
+    border-color: var(--gold);
+}
+
+.details-button:disabled,
+#previous-photo:disabled,
+#next-photo:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.gallery-viewer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+#gallery-status {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+}
+
+.gallery-item[hidden] {
+    display: none;
+}
+
+.form-feedback {
+    max-width: 700px;
+    margin-top: 18px;
+    padding: 16px;
+    color: var(--navy);
+    background-color: var(--teal-pale);
+    border-left: 4px solid var(--teal);
+}
+
+body.dark-theme {
+    color: #edf7f5;
+    background-color: #101c21;
+}
+
+body.dark-theme .content-section,
+body.dark-theme figure,
+body.dark-theme .project-card,
+body.dark-theme table,
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme textarea {
+    color: #edf7f5;
+    background-color: #1d3036;
+    border-color: #527176;
+}
+
+body.dark-theme .content-section h2,
+body.dark-theme caption,
+body.dark-theme label {
+    color: #d9f2ed;
+}
+
+body.dark-theme .main-navigation {
+    background-color: #13282e;
+}
+
+body.dark-theme .main-navigation a {
+    color: #e8f6f3;
+}
+
+body.dark-theme .form-feedback {
+    color: #e9faf6;
+    background-color: #21464c;
+}
+
+body.dark-theme th {
+    background-color: #071c24;
+}
+
+@media (max-width: 800px) {
+    .project-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .gallery-viewer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #previous-photo,
+    #next-photo,
+    #theme-toggle {
+        width: 100%;
+    }
+}

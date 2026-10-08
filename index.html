@@ -11,6 +11,7 @@
     <title>Tresford Mulilima | Computer Science Portfolio</title>
 
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/script.js" defer></script>
 </head>
 
 <body id="top">
@@ -27,7 +28,7 @@
                aria-label="Return to the top of the page">
 
                 <img class="site-logo"
-                     src="images/logo.jpg" width="3000"
+                     src="images/logo.jpg" 
                      alt="Tresford Mulilima personal logo">
             </a>
 
@@ -49,25 +50,31 @@
         </div>
     </header>
 
-    <nav class="main-navigation" aria-label="Main navigation">
-        <div class="nav-content">
+   <nav class="main-navigation" aria-label="Main navigation">
+    <div class="nav-content">
 
-            <a href="#about">About</a>
-            <a href="#hobbies">Interests</a>
-            <a href="#learning-plan">Learning Plan</a>
-            <a href="#photos">Gallery</a>
-            <a href="#media">Media</a>
-            <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+        <a href="#hobbies">Interests</a>
+        <a href="#projects">Projects</a>
+        <a href="#learning-plan">Learning Plan</a>
+        <a href="#photos">Gallery</a>
+        <a href="#media">Media</a>
+        <a href="#contact">Contact</a>
 
-            <a href="https://developer.mozilla.org/en-US/docs/Learn"
-               target="_blank"
-               rel="noopener noreferrer">
-                Web Resources
-            </a>
+        <button id="theme-toggle"
+                type="button"
+                aria-pressed="false">
+            Dark mode
+        </button>
 
-        </div>
-    </nav>
+        <a href="https://developer.mozilla.org/en-US/docs/Learn"
+           target="_blank"
+           rel="noopener noreferrer">
+            Web Resources
+        </a>
 
+    </div>
+</nav>
     <main id="main-content">
 
         <section id="about" class="content-section">
@@ -110,6 +117,84 @@
                 <li>Building websites and programming projects.</li>
             </ul>
         </section>
+        <section id="projects" class="content-section">
+    <h2>Projects and Skills</h2>
+
+    <p>
+        These examples represent the technical and creative skills I have
+        developed through my university studies and personal projects.
+    </p>
+
+    <div class="project-grid">
+
+        <article class="project-card">
+            <h3>Personal Portfolio Website</h3>
+
+            <p>
+                I created a responsive personal portfolio using HTML5, CSS3,
+                relative file paths, images, video and audio.
+            </p>
+
+            <button class="details-button"
+                    type="button"
+                    aria-expanded="false">
+                Show details
+            </button>
+
+            <div class="project-details" hidden>
+                <p>
+                    This project helped me practise semantic structure,
+                    responsive design, accessibility and version control.
+                </p>
+            </div>
+        </article>
+
+        <article class="project-card">
+            <h3>Java Programming</h3>
+
+            <p>
+                I have practised Java classes, objects, methods and basic
+                object-oriented programming principles.
+            </p>
+
+            <button class="details-button"
+                    type="button"
+                    aria-expanded="false">
+                Show details
+            </button>
+
+            <div class="project-details" hidden>
+                <p>
+                    I plan to improve this skill by developing larger programs
+                    using inheritance, interfaces and file handling.
+                </p>
+            </div>
+        </article>
+
+        <article class="project-card">
+            <h3>Digital Design and Branding</h3>
+
+            <p>
+                I create logos, posters and digital content using layout,
+                colour and visual communication principles.
+            </p>
+
+            <button class="details-button"
+                    type="button"
+                    aria-expanded="false">
+                Show details
+            </button>
+
+            <div class="project-details" hidden>
+                <p>
+                    This skill supports my interest in digital entrepreneurship,
+                    online services and professional branding.
+                </p>
+            </div>
+        </article>
+
+    </div>
+</section>
 
         <section id="learning-plan" class="content-section">
             <h2>My Learning Plan</h2>
@@ -173,66 +258,69 @@
             </table>
         </section>
 
-        <section id="photos" class="content-section">
-            <h2>Photo Gallery</h2>
+       <section id="photos" class="content-section">
+    <h2>Photo Gallery</h2>
 
-            <p>
-                The following photographs represent my learning environment,
-                academic interests and creative activities.
-            </p>
+    <p>
+        The following photographs represent my learning environment,
+        academic interests and creative activities.
+    </p>
 
-            <div class="photo-gallery">
+    <div class="gallery-viewer">
 
-                <figure>
-                    <img src="images/Captain.jpeg"
-                         alt="A photograph related to my university learning environment">
+        <button id="previous-photo"
+                type="button"
+                aria-label="Show the previous photo">
+            Previous
+        </button>
 
-                    <figcaption>
-                        A representation of my university learning environment.
-                    </figcaption>
-                </figure>
+        <button id="next-photo"
+                type="button"
+                aria-label="Show the next photo">
+            Next
+        </button>
 
-                <figure>
-                    <img src="images/Lukas focus mode.jpeg"
-                         alt="A photograph of a study and computer workspace">
+        <p id="gallery-status" aria-live="polite">
+            Use the Previous and Next buttons to browse the gallery.
+        </p>
 
-                    <figcaption>
-                        A workspace used for studying and programming.
-                    </figcaption>
-                </figure>
-                  <figure>
-                    <img src="images/TREK1.jpeg"
-                         alt="A photograph of a study and computer workspace">
+    </div>
 
-                    <figcaption>
-                        A workspace used for studying and programming.
-                    </figcaption>
-                </figure>
-                  <figure>
-                    <img src="images/TREK2.jpeg"
-                         alt="A photograph of a study and computer workspace">
+    <div class="photo-gallery">
 
-                    <figcaption>
-                        A workspace used for studying and programming.
-                    </figcaption>
-                </figure>
+        <figure class="gallery-item">
+            <img src="images/Captain.jpeg"
+                 alt="A photograph representing my university learning environment">
 
-                <figure>
-                    <img src="images/Shaddy focus mode.jpeg"
-                         alt="A photograph representing creativity and digital design">
+            <figcaption>
+                A representation of my university learning environment.
+            </figcaption>
+        </figure>
 
-                    <figcaption>
-                        My interest in creativity and digital design.
-                    </figcaption>
-                </figure>
+        <figure class="gallery-item">
+            <img src="images/Lukas focus mode.jpeg"
+                 alt="A photograph of a study and computer workspace">
 
-            </div>
+            <figcaption>
+                A workspace used for studying and programming.
+            </figcaption>
+        </figure>
 
-            <p class="media-note">
-                These photographs were taken by me or are used with permission.
-            </p>
-        </section>
+        <figure class="gallery-item">
+            <img src="images/Shaddy focus mode.jpeg"
+                 alt="A photograph representing creativity and digital design">
 
+            <figcaption>
+                My interest in creativity and digital design.
+            </figcaption>
+        </figure>
+
+    </div>
+
+    <p class="media-note">
+        These photographs were taken by me or are used with permission.
+    </p>
+</section>
         <section id="media" class="content-section">
             <h2>Media Introduction</h2>
 
