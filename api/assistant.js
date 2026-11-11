@@ -9,6 +9,23 @@ Verified portfolio context:
 - Contact: tresfordmulilima@gmail.com; GitHub https://github.com/2007Trek; WhatsApp +260960940621.
 Keep answers concise, professional and transparent about the difference between experience and learning interests.`;
 
+
+async function withinDailyLimit(key, limit) {
+  const base = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!base || !token) return false;
+  const day = new Date().toISOString().slice(0, 10);
+  const root = base.replace(/\\/$/, "");
+  const headers = { Authorization: `Bearer ${token}` };
+  const increment = await fetch(`${root}/incr/${key}:${day}`, { headers, cache: "no-store" });
+  if (!increment.ok) throw new Error("Rate-limit storage unavailable");
+  const data = await increment.json();
+  if (Number(data.result) === 1) {
+    await fetch(`${root}/expire/${key}:${day}/172800`, { headers, cache: "no-store" });
+  }
+  return Number(data.result) <= limit;
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method !== "POST") {
