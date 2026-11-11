@@ -39,7 +39,7 @@ A responsive personal portfolio for presenting academic background, selected sof
 
 ### Required for page-view counter
 - `UPSTASH_REDIS_REST_URL`: Upstash Redis REST endpoint.
-- `UPSTASH_REDIS_REST_TOKEN`: Upstash Redis REST token.
+- `UPSTASH_REDIS_REST_TOKEN`: Upstash Redis REST token.\n\nUpstash Redis is also required by the contact and assistant endpoints for daily usage limits (30 contact submissions and 100 assistant requests per UTC day). If Redis is not configured, these endpoints do not accept submissions.
 
 All secrets belong in Vercel environment settings, never in Git. The form, assistant and counter return a clear unavailable state until their respective environment variables are configured. Do not share API keys in chat or commit them to this repository.
 
