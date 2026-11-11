@@ -6,7 +6,7 @@ async function withinDailyLimit(key, limit) {
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!base || !token) return false;
   const day = new Date().toISOString().slice(0, 10);
-  const root = base.replace(/\\/$/, "");
+  const root = base.endsWith("/") ? base.slice(0, -1) : base;
   const headers = { Authorization: `Bearer ${token}` };
   const increment = await fetch(`${root}/incr/${key}:${day}`, { headers, cache: "no-store" });
   if (!increment.ok) throw new Error("Rate-limit storage unavailable");
