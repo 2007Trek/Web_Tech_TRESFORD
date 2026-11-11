@@ -1069,3 +1069,27 @@ body.dark-theme .stat-card { background:#07111c; }
   .typing-cursor { animation:none; }
   .contact-cards a { transition:none; }
 }
+
+
+/* Contact, assistant and analytics enhancements */
+.portfolio-form, .assistant-form { max-width:760px; margin-top:22px; }
+.portfolio-form input, .portfolio-form textarea, .assistant-form textarea { border-radius:8px; }
+.portfolio-form button, .assistant-form button { border-radius:7px; background:var(--teal); border-color:var(--teal); color:#06211f; }
+.portfolio-form button:disabled, .assistant-form button:disabled { opacity:.6; cursor:wait; }
+.honeypot { position:absolute!important; left:-10000px!important; width:1px!important; height:1px!important; overflow:hidden!important; }
+.form-feedback { border-radius:7px; }
+.assistant-section, .analytics-section { margin-top:26px; }
+.assistant-log { display:grid; gap:10px; max-height:360px; overflow-y:auto; padding:16px; border:1px solid var(--line); border-radius:10px; background:#f5f8fa; }
+.assistant-message, .user-message { max-width:min(90%,680px); margin:0; padding:12px 15px; border-radius:12px; line-height:1.5; white-space:pre-wrap; overflow-wrap:anywhere; }
+.assistant-message { justify-self:start; background:#e4f4f1; color:#18343a; }
+.user-message { justify-self:end; background:#0b3542; color:#fff; }
+.assistant-form label { display:block; margin-bottom:8px; }
+.assistant-form textarea { min-height:90px; }
+body.dark-theme .assistant-log { background:#0e1d27; border-color:var(--line); }
+body.dark-theme .assistant-message { color:#e6f3f5; background:#21464c; }
+body.dark-theme .user-message { color:#fff; background:#087d78; }
+body.dark-theme .portfolio-form label, body.dark-theme .assistant-form label { color:#e6f3f5; }
+@media(max-width:560px) {
+  .assistant-log { max-height:300px; padding:10px; }
+  .assistant-message, .user-message { max-width:100%; }
+}
