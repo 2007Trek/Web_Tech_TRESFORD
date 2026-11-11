@@ -3,6 +3,7 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL = "https://qsodrnnxvzryitwtclyt.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_LTcpnoQZ7mf5cnb2CgD7qw_hOj-c2ku";
 const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const destination = (() => { const raw = new URLSearchParams(location.search).get("next"); return raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/index.html"; })();
 
 const form = document.querySelector("#auth-form");
 const title = document.querySelector("#form-title");
@@ -48,11 +49,11 @@ form.addEventListener("submit", async event => {
       feedback.textContent = data.session
         ? "Account created. Opening your member area…"
         : "Account created. Check your email to verify your address, then sign in.";
-      if (data.session) location.href = "member.html";
+      if (data.session) location.href = destination;
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
       if (error) throw error;
-      location.href = "member.html";
+      location.href = destination;
     }
   } catch (error) {
     feedback.textContent = error.message || "Authentication failed. Please try again.";
@@ -77,4 +78,4 @@ forgot.addEventListener("click", async () => {
 });
 
 const { data: { session } } = await supabase.auth.getSession();
-if (session) location.href = "member.html";
+if (session) location.replace(destination);
