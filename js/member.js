@@ -1,6 +1,6 @@
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { createBrowserClient } from "https://esm.sh/@supabase/ssr@0.6.1";
 
-const supabase = createClient(
+const supabase = createBrowserClient(
   "https://qsodrnnxvzryitwtclyt.supabase.co",
   "sb_publishable_LTcpnoQZ7mf5cnb2CgD7qw_hOj-c2ku"
 );
