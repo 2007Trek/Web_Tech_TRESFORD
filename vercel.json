@@ -1,5 +1,27 @@
 {
   "version": 2,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/api/protected-page?file=index.html"
+    },
+    {
+      "source": "/index.html",
+      "destination": "/api/protected-page?file=index.html"
+    },
+    {
+      "source": "/blog.html",
+      "destination": "/api/protected-page?file=blog.html"
+    },
+    {
+      "source": "/cv.html",
+      "destination": "/api/protected-page?file=cv.html"
+    },
+    {
+      "source": "/member.html",
+      "destination": "/api/protected-page?file=member.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
