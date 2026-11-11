@@ -1,8 +1,8 @@
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { createBrowserClient } from "https://esm.sh/@supabase/ssr@0.6.1";
 
 const SUPABASE_URL = "https://qsodrnnxvzryitwtclyt.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_LTcpnoQZ7mf5cnb2CgD7qw_hOj-c2ku";
-const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const supabase = createBrowserClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 const destination = (() => { const raw = new URLSearchParams(location.search).get("next"); return raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/index.html"; })();
 
 const form = document.querySelector("#auth-form");
@@ -43,7 +43,7 @@ form.addEventListener("submit", async event => {
     if (mode === "signup") {
       const { data, error } = await supabase.auth.signUp({
         email, password: pass,
-        options: { data: { full_name: nameInput.value.trim() }, emailRedirectTo: new URL("member.html", location.href).href }
+        options: { data: { full_name: nameInput.value.trim() }, emailRedirectTo: "https://trek-portfolio.vercel.app/auth.html?next=%2Findex.html" }
       });
       if (error) throw error;
       feedback.textContent = data.session
@@ -68,7 +68,7 @@ forgot.addEventListener("click", async () => {
   forgot.disabled = true;
   try {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: new URL("auth.html", location.href).href
+      redirectTo: "https://trek-portfolio.vercel.app/auth.html"
     });
     if (error) throw error;
     feedback.textContent = "If an account exists for that address, a password-reset email has been sent.";
