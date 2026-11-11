@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="TREK portfolio member dashboard.">
+  <title>Member dashboard | Tresford Mulilima</title>
+  <link rel="stylesheet" href="css/auth.css">
+  <script type="module" src="js/member.js"></script>
+</head>
+<body>
+  <main class="dashboard-shell">
+    <header class="dashboard-header">
+      <a class="back-link" href="index.html">← Portfolio</a>
+      <button class="secondary" id="signout-button" type="button">Sign out</button>
+    </header>
+    <section class="dashboard-welcome">
+      <p class="eyebrow">TREK PORTFOLIO · PRIVATE MEMBER AREA</p>
+      <h1>Welcome, <span id="member-name">member</span>.</h1>
+      <p class="muted">Your member account is active. More community tools will appear here as they are enabled.</p>
+    </section>
+    <section class="panel">
+      <h2>Your profile</h2>
+      <form id="profile-form">
+        <label for="display-name">Display name</label>
+        <input id="display-name" maxlength="80" required>
+        <button class="primary" type="submit">Save profile</button>
+      </form>
+      <p class="feedback" id="profile-feedback" role="status"></p>
+    </section>
+    <section class="panel">
+      <h2>Member access</h2>
+      <p id="member-email" class="muted"></p>
+      <p class="fine-print">Your account is authenticated through Supabase. Do not share your password or verification links.</p>
+    </section>
+  </main>
+</body>
+</html>
