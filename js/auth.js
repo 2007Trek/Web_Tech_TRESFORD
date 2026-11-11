@@ -5,6 +5,18 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_LTcpnoQZ7mf5cnb2CgD7qw_hOj-c2ku
 const supabase = createBrowserClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 const destination = (() => { const raw = new URLSearchParams(location.search).get("next"); return raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/index.html"; })();
 
+const callbackCode = new URLSearchParams(location.search).get("code");
+if (callbackCode) {
+  const { error } = await supabase.auth.exchangeCodeForSession(callbackCode);
+  if (error) {
+    const node = document.querySelector("#feedback");
+    if (node) node.textContent = "Email verification could not be completed. Please sign in again.";
+  } else {
+    history.replaceState({}, "", "/auth.html");
+    location.replace(destination);
+  }
+}
+
 const form = document.querySelector("#auth-form");
 const title = document.querySelector("#form-title");
 const description = document.querySelector("#form-description");
