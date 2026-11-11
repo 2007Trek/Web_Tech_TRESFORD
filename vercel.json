@@ -44,5 +44,10 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/protected-page.js": {
+      "includeFiles": "*.html"
+    }
+  }
 }
