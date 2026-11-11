@@ -92,3 +92,90 @@ loadGitHubProfile();
 /* Footer year stays current. */
 const yearNode = document.querySelector("#current-year");
 if (yearNode) yearNode.textContent = new Date().getFullYear();
+
+
+/* Contact form: message delivery is performed by the serverless endpoint. */
+const contactForm = document.querySelector("#contact-form");
+const contactFeedback = document.querySelector("#contact-feedback");
+contactForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const submit = contactForm.querySelector('button[type="submit"]');
+  submit.disabled = true;
+  contactFeedback.hidden = false;
+  contactFeedback.textContent = "Sending message…";
+  try {
+    const values = Object.fromEntries(new FormData(contactForm).entries());
+    const response = await fetch("/api/contact", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(values)
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Message could not be sent.");
+    contactFeedback.textContent = result.message || "Your message has been sent.";
+    contactForm.reset();
+  } catch (error) {
+    contactFeedback.textContent = error.message + " You can email tresfordmulilima@gmail.com directly.";
+  } finally {
+    submit.disabled = false;
+  }
+});
+
+/* Portfolio assistant: conversation is sent to a server endpoint; API keys stay server-side. */
+const assistantForm = document.querySelector("#assistant-form");
+const assistantLog = document.querySelector("#assistant-log");
+const assistantFeedback = document.querySelector("#assistant-feedback");
+const assistantQuestion = document.querySelector("#assistant-question");
+const assistantMessages = [];
+function addAssistantMessage(role, content) {
+  const item = document.createElement("p");
+  item.className = role === "user" ? "user-message" : "assistant-message";
+  item.textContent = content;
+  assistantLog?.append(item);
+  if (assistantLog) assistantLog.scrollTop = assistantLog.scrollHeight;
+}
+assistantForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const question = assistantQuestion.value.trim();
+  if (!question) return;
+  assistantForm.querySelector("button").disabled = true;
+  assistantFeedback.hidden = false;
+  assistantFeedback.textContent = "Thinking…";
+  addAssistantMessage("user", question);
+  assistantMessages.push({ role: "user", content: question });
+  assistantQuestion.value = "";
+  try {
+    const response = await fetch("/api/assistant", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: assistantMessages.slice(-8) })
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Assistant is unavailable.");
+    addAssistantMessage("assistant", result.reply);
+    assistantMessages.push({ role: "assistant", content: result.reply });
+    assistantFeedback.textContent = "Response received.";
+  } catch (error) {
+    assistantFeedback.textContent = error.message;
+    assistantMessages.pop();
+  } finally {
+    assistantForm.querySelector("button").disabled = false;
+    assistantQuestion.focus();
+  }
+});
+
+/* Aggregate page-view counter. No IP address, fingerprint or personal identifier is stored. */
+const visitCountNode = document.querySelector("#visit-count");
+async function loadVisitCount() {
+  if (!visitCountNode) return;
+  try {
+    const counted = sessionStorage.getItem("trek-portfolio-counted");
+    const response = await fetch(counted ? "/api/analytics" : "/api/analytics", {
+      method: counted ? "GET" : "POST", cache: "no-store"
+    });
+    const result = await response.json();
+    if (!response.ok || !result.enabled) throw new Error(result.error || "Analytics is not configured.");
+    sessionStorage.setItem("trek-portfolio-counted", "1");
+    visitCountNode.textContent = `Portfolio page views: ${Number(result.visits).toLocaleString()} (aggregate count)`;
+  } catch {
+    visitCountNode.textContent = "Visit counter will appear after analytics storage is configured.";
+  }
+}
+loadVisitCount();
