@@ -1,152 +1,94 @@
 "use strict";
 
-/* Validates the local contact form and shows a preview without sending data. */
-const contactForm = document.querySelector("#contact-form");
-const formFeedback = document.querySelector("#form-feedback");
-
-if (contactForm && formFeedback) {
-    contactForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        const nameInput = document.querySelector("#name");
-        const emailInput = document.querySelector("#email");
-        const messageInput = document.querySelector("#message");
-
-        const name = nameInput.value.trim();
-        const email = emailInput.value.trim();
-        const message = messageInput.value.trim();
-
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        formFeedback.className = "form-feedback";
-
-        if (name === "") {
-            formFeedback.textContent =
-                "Please enter your name. Names containing only spaces are not accepted.";
-
-            formFeedback.classList.add("form-error");
-            nameInput.focus();
-            return;
-        }
-
-        if (!emailPattern.test(email)) {
-            formFeedback.textContent =
-                "Please enter a valid email address.";
-
-            formFeedback.classList.add("form-error");
-            emailInput.focus();
-            return;
-        }
-
-        if (message === "") {
-            formFeedback.textContent =
-                "Please enter a message. Messages containing only spaces are not accepted.";
-
-            formFeedback.classList.add("form-error");
-            messageInput.focus();
-            return;
-        }
-
-        formFeedback.textContent =
-            `Your data was validated successfully. `
-            + `Name: ${name}. `
-            + `Email: ${email}. `
-            + `This is a local preview only; no message was sent.`;
-
-        formFeedback.classList.add("form-success");
-
-        contactForm.reset();
-    });
+/* Theme preference persists across visits. */
+const themeToggle = document.querySelector("#theme-toggle");
+const savedTheme = localStorage.getItem("trek-portfolio-theme");
+if (savedTheme === "dark") document.body.classList.add("dark-theme");
+function syncThemeButton() {
+  if (!themeToggle) return;
+  const dark = document.body.classList.contains("dark-theme");
+  themeToggle.textContent = dark ? "Light mode" : "Dark mode";
+  themeToggle.setAttribute("aria-pressed", String(dark));
 }
-
-
-/* Opens and closes additional information for each project card. */
-const detailButtons = document.querySelectorAll(".details-button");
-
-detailButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
-        const details = button.nextElementSibling;
-        const isHidden = details.hasAttribute("hidden");
-
-        if (isHidden) {
-            details.removeAttribute("hidden");
-            button.textContent = "Hide details";
-            button.setAttribute("aria-expanded", "true");
-        } else {
-            details.setAttribute("hidden", "");
-            button.textContent = "Show details";
-            button.setAttribute("aria-expanded", "false");
-        }
-    });
+syncThemeButton();
+themeToggle?.addEventListener("click", () => {
+  const dark = document.body.classList.toggle("dark-theme");
+  localStorage.setItem("trek-portfolio-theme", dark ? "dark" : "light");
+  syncThemeButton();
 });
 
+/* Typing headline: decorative only; reduced-motion users see a static title. */
+const titleNode = document.querySelector("#typed-title");
+const titles = ["Computer Science Student", "Aspiring Software Engineer", "AI Enthusiast"];
+if (titleNode && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  let titleIndex = 0, charIndex = titles[0].length, deleting = true;
+  const typeNext = () => {
+    const current = titles[titleIndex];
+    charIndex += deleting ? -1 : 1;
+    titleNode.textContent = current.slice(0, charIndex);
+    let delay = deleting ? 55 : 95;
+    if (!deleting && charIndex === current.length) { deleting = true; delay = 1500; }
+    else if (deleting && charIndex === 0) { deleting = false; titleIndex = (titleIndex + 1) % titles.length; delay = 350; }
+    window.setTimeout(typeNext, delay);
+  };
+  window.setTimeout(typeNext, 1800);
+}
 
-/* Displays one gallery photo at a time and handles first/last boundaries. */
-const galleryItems = document.querySelectorAll(".gallery-item");
+/* One-at-a-time photo gallery with safe boundary handling. */
+const galleryItems = [...document.querySelectorAll(".gallery-item")];
 const previousPhotoButton = document.querySelector("#previous-photo");
 const nextPhotoButton = document.querySelector("#next-photo");
 const galleryStatus = document.querySelector("#gallery-status");
-
 let currentPhotoIndex = 0;
-
 function displayPhoto(index) {
-    galleryItems.forEach(function (item, itemIndex) {
-        item.hidden = itemIndex !== index;
-    });
-
-    if (galleryStatus) {
-        galleryStatus.textContent =
-            `Showing photo ${index + 1} of ${galleryItems.length}.`;
-    }
-
-    if (previousPhotoButton) {
-        previousPhotoButton.disabled = index === 0;
-    }
-
-    if (nextPhotoButton) {
-        nextPhotoButton.disabled =
-            index === galleryItems.length - 1;
-    }
+  galleryItems.forEach((item, itemIndex) => { item.hidden = itemIndex !== index; });
+  if (galleryStatus) galleryStatus.textContent = `Showing photo ${index + 1} of ${galleryItems.length}.`;
+  if (previousPhotoButton) previousPhotoButton.disabled = index === 0;
+  if (nextPhotoButton) nextPhotoButton.disabled = index === galleryItems.length - 1;
+}
+if (galleryItems.length) {
+  displayPhoto(0);
+  previousPhotoButton?.addEventListener("click", () => { if (currentPhotoIndex > 0) displayPhoto(--currentPhotoIndex); });
+  nextPhotoButton?.addEventListener("click", () => { if (currentPhotoIndex < galleryItems.length - 1) displayPhoto(++currentPhotoIndex); });
 }
 
-if (galleryItems.length > 0) {
-    displayPhoto(currentPhotoIndex);
-
-    if (previousPhotoButton) {
-        previousPhotoButton.addEventListener("click", function () {
-            if (currentPhotoIndex > 0) {
-                currentPhotoIndex -= 1;
-                displayPhoto(currentPhotoIndex);
-            }
-        });
-    }
-
-    if (nextPhotoButton) {
-        nextPhotoButton.addEventListener("click", function () {
-            if (currentPhotoIndex < galleryItems.length - 1) {
-                currentPhotoIndex += 1;
-                displayPhoto(currentPhotoIndex);
-            }
-        });
-    }
+/* Public GitHub API only: no personal access token or secret in the browser. */
+const githubStatus = document.querySelector("#github-status");
+const githubStats = document.querySelector("#github-stats");
+const githubRepositories = document.querySelector("#github-repositories");
+const escapeHTML = (value) => String(value ?? "").replace(/[&<>"']/g, char => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+}[char]));
+async function loadGitHubProfile() {
+  if (!githubStatus || !githubStats || !githubRepositories) return;
+  try {
+    const headers = { Accept: "application/vnd.github+json" };
+    const [profileResponse, reposResponse] = await Promise.all([
+      fetch("https://api.github.com/users/2007Trek", { headers }),
+      fetch("https://api.github.com/users/2007Trek/repos?sort=updated&per_page=6&type=owner", { headers })
+    ]);
+    if (!profileResponse.ok || !reposResponse.ok) throw new Error("GitHub public API is temporarily unavailable.");
+    const profile = await profileResponse.json();
+    const repos = await reposResponse.json();
+    githubStats.innerHTML = [
+      ["Public repositories", profile.public_repos],
+      ["Followers", profile.followers],
+      ["Following", profile.following]
+    ].map(([label, value]) => `<div class="stat-card"><strong>${Number(value).toLocaleString()}</strong><span>${escapeHTML(label)}</span></div>`).join("");
+    githubRepositories.innerHTML = repos.slice(0, 6).map(repo => `
+      <article class="repo-card">
+        <h3><a href="${escapeHTML(repo.html_url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(repo.name)} ↗</a></h3>
+        <p>${escapeHTML(repo.description || "No public description provided.")}</p>
+        <div class="repo-meta"><span>${escapeHTML(repo.language || "Language not specified")}</span><span>★ ${Number(repo.stargazers_count).toLocaleString()}</span><span>Updated ${new Date(repo.updated_at).toLocaleDateString()}</span></div>
+      </article>`).join("") || "<p>No public repositories were returned.</p>";
+    githubStatus.textContent = "Public profile data loaded successfully.";
+  } catch (error) {
+    githubStatus.textContent = error.message + " Visit the GitHub profile directly to see current activity.";
+    githubRepositories.innerHTML = '<a class="text-link" href="https://github.com/2007Trek?tab=repositories" target="_blank" rel="noopener noreferrer">Browse repositories on GitHub ↗</a>';
+  }
 }
+loadGitHubProfile();
 
-
-/* Switches between readable light and dark colour themes. */
-const themeToggle = document.querySelector("#theme-toggle");
-
-if (themeToggle) {
-    themeToggle.addEventListener("click", function () {
-        const darkModeEnabled =
-            document.body.classList.toggle("dark-theme");
-
-        themeToggle.textContent = darkModeEnabled
-            ? "Light mode"
-            : "Dark mode";
-
-        themeToggle.setAttribute(
-            "aria-pressed",
-            String(darkModeEnabled)
-        );
-    });
-}
+/* Footer year stays current. */
+const yearNode = document.querySelector("#current-year");
+if (yearNode) yearNode.textContent = new Date().getFullYear();
